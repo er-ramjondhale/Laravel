@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Carbon\Carbon;
 
 class User extends Authenticatable
 {
@@ -45,4 +46,27 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function getNameAttribute($value)
+    {
+        return ucfirst($value);
+    }
+
+    protected $appends = ['created_at_formatted'];
+        
+    public function getCreatedAtFormattedAttribute()
+    {
+        return Carbon::parse($this->created_at)->format('l, jS F Y \a\t h:i A');
+    }
+
+    /*
+    # you can do this by overriding the toArray() method in the model to modify the created_at value.
+    public function toArray()
+    {
+        $array = parent::toArray();
+        $array['created_at'] = Carbon::parse($this->created_at)->format('l, jS F Y \a\t h:i A');
+        return $array;
+    }
+    */
+
 }
